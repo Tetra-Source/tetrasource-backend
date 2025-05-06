@@ -24,6 +24,13 @@ export class User extends Entity {
   lastName: string;
 
   @property({
+    type:'array',
+    itemType:'string',
+    required:true,
+  })
+  roles:string[];
+
+  @property({
     type: 'string',
     required: true,
   })
@@ -42,10 +49,15 @@ export class User extends Entity {
   password: string;
 
   @property({
-    type: 'string',
-    required: false,
+    type:'string',
+    required:true,
   })
-  category: string;
+  number:string
+  @property({
+    type:'string',
+    required:false
+  })
+  imageUrl:string
 
   @hasOne(() => UserCredentials)
   userCredentials: UserCredentials;

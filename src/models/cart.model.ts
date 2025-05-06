@@ -1,7 +1,7 @@
 import {Entity, model, property} from '@loopback/repository';
 
 @model({settings: {strict: false}})
-export class Contact extends Entity {
+export class Cart extends Entity {
   @property({
     type: 'string',
     id: true,
@@ -13,43 +13,25 @@ export class Contact extends Entity {
     type: 'string',
     required: true,
   })
-  name: string;
+  productId: string;
+
+  @property({
+    type: 'number',
+    required: true,
+  })
+  price: number;
 
   @property({
     type: 'string',
     required: true,
   })
-  email: string;
+  productName: string;
 
   @property({
     type: 'string',
     required: true,
   })
-  subject: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  number: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  company: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  country: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  message: string;
+  productCategory: string;
 
   // Define well-known properties here
 
@@ -57,13 +39,13 @@ export class Contact extends Entity {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [prop: string]: any;
 
-  constructor(data?: Partial<Contact>) {
+  constructor(data?: Partial<Cart>) {
     super(data);
   }
 }
 
-export interface ContactRelations {
+export interface CartRelations {
   // describe navigational properties here
 }
 
-export type ContactWithRelations = Contact & ContactRelations;
+export type CartWithRelations = Cart & CartRelations;

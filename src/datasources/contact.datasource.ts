@@ -4,13 +4,16 @@ import {juggler} from '@loopback/repository';
 const config = {
   name: 'contact',
   connector: 'mongodb',
-  url: 'mongodb://localhost:27017/product',
-  host: 'localhost',
-  port: 27017,
-  user: '',
-  password: '',
+  url: 'mongodb+srv://tetrasolutionsoftware:tetra123@cluster0.ffsmenm.mongodb.net/contact?retryWrites=true&w=majority&appName=Cluster0',
   database: 'contact',
-  useNewUrlParser: false
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  tls: true,
+  connectTimeoutMS: 10000,
+  socketTimeoutMS: 45000,
+  serverSelectionTimeoutMS: 5000,
+  retryWrites: true,
+  retryReads: true,
 };
 
 // Observe application's life cycle to disconnect the datasource when

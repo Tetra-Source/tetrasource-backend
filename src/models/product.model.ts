@@ -33,7 +33,12 @@ export class Product extends Entity {
   })
   imageUrl: string;
 
-
+  @property({
+    type:'string',
+    required:true
+  })
+  description:string
+  
   constructor(data?: Partial<Product>) {
     super(data);
   }

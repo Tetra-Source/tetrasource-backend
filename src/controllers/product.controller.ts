@@ -16,9 +16,42 @@ import {
   del,
   requestBody,
   response,
+  Request,
+  RestBindings,
+  Response,
 } from '@loopback/rest';
 import {Product} from '../models';
 import {ProductRepository} from '../repositories';
+import multer from 'multer';
+import path from 'path';
+import {inject} from '@loopback/context/dist';
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join('uploads'));
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, `product-${uniqueSuffix}${path.extname(file.originalname)}`);
+  },
+});
+
+export const upload = multer({
+  storage,
+  limits: {fileSize: 5 * 1024 * 1024}, // 5MB limit
+  fileFilter: (req, file, cb) => {
+    const filetypes = /jpeg|jpg|png|gif/;
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase(),
+    );
+    const mimetype = filetypes.test(file.mimetype);
+
+    if (mimetype && extname) {
+      return cb(null, true);
+    }
+    cb(new Error('Only image files are allowed!'));
+  },
+});
 
 export class ProductController {
   constructor(
@@ -32,19 +65,33 @@ export class ProductController {
     content: {'application/json': {schema: getModelSchemaRef(Product)}},
   })
   async create(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Product, {
-            title: 'NewProduct',
-            exclude: ['id'],
-          }),
-        },
-      },
-    })
-    product: Omit<Product, 'id'>,
+    @requestBody.file()
+    request: Request,
+    @inject(RestBindings.Http.RESPONSE) response:Response
   ): Promise<Product> {
-    return this.productRepository.create(product);
+   return new Promise((resolve, reject) => {
+         upload.single('imageUrl')(request, response, async err => {
+           if (err) return reject(err);
+
+           const {productName, category, price} = request.body;
+
+           const imagePath = request.file?.path ?? '';
+
+           const productData = {
+             productName,
+             category,
+             price,
+             imageUrl: imagePath,
+           };
+
+           try {
+             const newUser = await this.productRepository.create(productData);
+             resolve(newUser);
+           } catch (error) {
+             reject(error);
+           }
+         });
+       });
   }
 
   @get('/products/count')

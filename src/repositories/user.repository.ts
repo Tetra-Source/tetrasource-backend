@@ -28,7 +28,7 @@ export class UserRepository extends DefaultCrudRepository<
   >;
 
   constructor(
-    @inject('datasources.mydatabase') dataSource: UserDataSource,
+    @inject('datasources.user') dataSource: UserDataSource,
 
     @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public passwordHasher: PasswordHasher,

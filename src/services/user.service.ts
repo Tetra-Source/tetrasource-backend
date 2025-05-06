@@ -13,12 +13,15 @@ export class UserService {
     public userRepository: UserRepository,
   ) {}
 
-
   convertToUserProfile(user: User): UserProfile {
+    console.log('user data from service',user);
+    
     return {
       [securityId]: user.id!,
       name: user.userName,
       email: user.email,
+      id: user.id!,
+      roles: user.roles,
     };
   }
 }
