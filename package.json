@@ -60,10 +60,14 @@
     "@loopback/rest-explorer": "^6.1.5",
     "@loopback/security": "^0.10.5",
     "@loopback/service-proxy": "^6.1.5",
+    "@types/nodemailer": "^6.4.17",
+    "@types/nodemailer-express-handlebars": "^4.0.5",
     "bcryptjs": "^2.4.3",
+    "handlebars": "^4.7.8",
     "isemail": "^3.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.15.0",
+    "nodemailer": "^7.0.3",
     "tslib": "^2.0.0"
   },
   "devDependencies": {

@@ -22,6 +22,7 @@ import {JWTAuthenticationComponent} from '@loopback/authentication-jwt';
 import {JWTService} from './services/jwt.service';
 import {TokenServiceBindings} from './services/key';
 import {BasicAuthorizationProvider} from './services/basic.authorizor';
+import {EmailService} from './services';
 
 
 export {ApplicationConfig};
@@ -45,6 +46,7 @@ export class TetraApplication extends BootMixin(
     );
     this.static('/uploads', path.join(__dirname, '../uploads'));
     this.sequence(MySequence);
+    this.bind('services.EmailService').toClass(EmailService);
 
     // Set up default home page
     this.static('/', path.join(__dirname, '../public'));

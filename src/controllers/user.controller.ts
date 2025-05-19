@@ -196,9 +196,10 @@ export class UserController {
   async count(@param.where(User) where?: Where<User>): Promise<Count> {
     return this.userRepository.count(where);
   }
+  
   @authenticate('jwt')
   @authorize({
-    allowedRoles: ['admin'],
+    allowedRoles: ['superAdmin'],
     voters: ['authorizationProviders.basic-authorizer'],
   })
   @get('/users')

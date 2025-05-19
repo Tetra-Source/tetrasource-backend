@@ -73,7 +73,7 @@ export class ProductController {
          upload.single('imageUrl')(request, response, async err => {
            if (err) return reject(err);
 
-           const {productName, category, price} = request.body;
+           const {productName, category, price,description} = request.body;
 
            const imagePath = request.file?.path ?? '';
 
@@ -82,6 +82,7 @@ export class ProductController {
              category,
              price,
              imageUrl: imagePath,
+             description
            };
 
            try {
