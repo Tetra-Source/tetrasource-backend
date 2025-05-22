@@ -196,7 +196,7 @@ export class UserController {
   async count(@param.where(User) where?: Where<User>): Promise<Count> {
     return this.userRepository.count(where);
   }
-  
+
   @authenticate('jwt')
   @authorize({
     allowedRoles: ['superAdmin'],
@@ -259,16 +259,38 @@ export class UserController {
   })
   async updateById(
     @param.path.string('id') id: string,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(User, {partial: true}),
-        },
-      },
-    })
-    user: User,
+    @requestBody.file() request: Request,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<void> {
-    await this.userRepository.updateById(id, user);
+    return new Promise((resolve, reject) => {
+      upload.single('imageUrl')(request, response, async err => {
+        if (err) return reject(err);
+
+        const {firstName, lastName, userName, email, number,} =
+          request.body;
+        const imagePath = request.file?.path;
+
+        const updateData: any = {
+          firstName,
+          lastName,
+          userName,
+          email,
+          number,
+        };
+
+        if (imagePath) {
+          updateData.imageUrl = imagePath;
+        }
+        console.log('edit data',updateData);
+
+        try {
+          await this.userRepository.updateById(id, updateData);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
   }
 
   @put('/users/{id}')
