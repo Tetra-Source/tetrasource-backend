@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      background-color: #ffffff;
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #004aad;
+      margin-top: 0;
+    }
+    .info-block {
+      margin-bottom: 15px;
+    }
+    .info-block strong {
+      display: inline-block;
+      width: 120px;
+    }
+    .footer {
+      margin-top: 30px;
+      font-size: 0.9em;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>New Contact Us Submission</h2>
+
+    <div class="info-block">
+      <strong>Name:</strong> {{name}}
+    </div>
+    <div class="info-block">
+      <strong>Email:</strong> {{email}}
+    </div>
+    <div class="info-block">
+      <strong>Subject:</strong> {{subject}}
+    </div>
+    <div class="info-block">
+      <strong>Phone Number:</strong> {{number}}
+    </div>
+    <div class="info-block">
+      <strong>Company:</strong> {{company}}
+    </div>
+    <div class="info-block">
+      <strong>Country:</strong> {{country}}
+    </div>
+    <div class="info-block">
+      <strong>Message:</strong><br>{{message}}
+    </div>
+
+    <div class="info-block">
+      <strong>Submitted At:</strong> {{createdAt}}
+    </div>
+
+    <div class="footer">
+      This message was generated automatically from the Contact Us form.
+    </div>
+  </div>
+</body>
+</html>

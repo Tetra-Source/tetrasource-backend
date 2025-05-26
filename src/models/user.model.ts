@@ -59,6 +59,15 @@ export class User extends Entity {
   })
   imageUrl:string
 
+  @property({type:'date',defaultFn:'now'})
+  createdAt?:Date;
+
+  @property({type:'date'})
+  updatedAt?:Date
+
+  @property({type:'date'})
+  deletedAt?:Date
+
   @hasOne(() => UserCredentials)
   userCredentials: UserCredentials;
 

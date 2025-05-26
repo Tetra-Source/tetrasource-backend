@@ -19,11 +19,14 @@ import {
 } from '@loopback/rest';
 import {Contact} from '../models';
 import {ContactRepository} from '../repositories';
+import {EmailService} from '../services';
+import {inject} from '@loopback/context/dist';
 
 export class ContactController {
   constructor(
     @repository(ContactRepository)
     public contactRepository : ContactRepository,
+    @inject('services.EmailService') public emailService:EmailService
   ) {}
 
   @post('/contacts')
@@ -44,7 +47,22 @@ export class ContactController {
     })
     contact: Omit<Contact, 'id'>,
   ): Promise<Contact> {
-    return this.contactRepository.create(contact);
+    const savedContact = await this.contactRepository.create(contact);
+
+    const content = {
+      name: savedContact.name,
+      email: savedContact.email,
+      number: savedContact.number,
+      company: savedContact.company,
+      country: savedContact.country,
+      createdAt: savedContact.createdAt,
+      subject: savedContact.subject,
+      message: savedContact.message,
+
+    }
+    this.emailService.sendEmail('contactTemplates',content)
+
+    return savedContact
   }
 
   @get('/contacts/count')

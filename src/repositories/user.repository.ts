@@ -1,5 +1,5 @@
 import {Getter, inject} from '@loopback/core';
-import {DefaultCrudRepository, HasOneRepositoryFactory, repository} from '@loopback/repository';
+import {DataObject, DefaultCrudRepository, HasOneRepositoryFactory, Options, repository} from '@loopback/repository';
 import {UserDataSource} from '../datasources';
 import {User, UserCredentials, UserRelations} from '../models';
 import {UserCredentialsRepository} from './user-credentials.repository';
@@ -27,6 +27,14 @@ export class UserRepository extends DefaultCrudRepository<
     typeof User.prototype.id
   >;
 
+  async updateById(id: string | undefined, data: DataObject<User>, options?: Options): Promise<void> {
+    data.updatedAt = new Date();
+    return super.updateById(id,data)
+  }
+  async softDeleteById(id:typeof User.prototype.id):Promise<void>{
+    await this.updateById(id,{deletedAt:new Date()})
+  }
+  
   constructor(
     @inject('datasources.user') dataSource: UserDataSource,
 

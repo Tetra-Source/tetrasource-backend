@@ -51,6 +51,12 @@ export class Contact extends Entity {
   })
   message: string;
 
+  @property({type:'date',defaultFn:'now'})
+  createdAt?:Date
+  @property({type:'date'})
+  updatedAt?:Date
+  @property({type:'date'})
+  deletedAt?:Date
   // Define well-known properties here
 
   // Indexer property to allow additional data
