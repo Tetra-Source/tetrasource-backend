@@ -3,7 +3,7 @@ name: Deploy LoopBack Backend to Google Cloud Run
 on:
   push:
     branches:
-      - master
+      - [master]
 
 jobs:
   deploy:
