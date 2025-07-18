@@ -39,6 +39,12 @@ export class Product extends Entity {
   })
   description: string
 
+  @property({
+    type:'string',
+    required:true
+  })
+  partNumber: string
+
   @property({type: 'date', defaultFn: 'now'})
   createdAt?: Date;
   @property({type: 'date'})
@@ -46,7 +52,7 @@ export class Product extends Entity {
   @property({type: 'date'})
   deletedAt?: Date;
 
-  
+
   constructor(data?: Partial<Product>) {
     super(data);
   }

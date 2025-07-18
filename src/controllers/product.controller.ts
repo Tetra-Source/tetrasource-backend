@@ -73,7 +73,7 @@ export class ProductController {
          upload.single('imageUrl')(request, response, async err => {
            if (err) return reject(err);
 
-           const {productName, category, price,description} = request.body;
+           const {productName, category, price,description,partNumber} = request.body;
 
            const imagePath = request.file?.path ?? '';
 
@@ -82,7 +82,8 @@ export class ProductController {
              category,
              price,
              imageUrl: imagePath,
-             description
+             description,
+             partNumber
            };
 
            try {
@@ -160,22 +161,43 @@ export class ProductController {
   }
 
   @patch('/products/{id}')
-  @response(204, {
-    description: 'Product PATCH success',
-  })
-  async updateById(
-    @param.path.string('id') id: string,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Product, {partial: true}),
-        },
-      },
-    })
-    product: Product,
-  ): Promise<void> {
-    await this.productRepository.updateById(id, product);
-  }
+@response(204, {
+  description: 'Product PATCH success',
+})
+async updateById(
+  @param.path.string('id') id: string,
+  @requestBody.file()
+  request: Request,
+  @inject(RestBindings.Http.RESPONSE) response: Response
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    upload.single('imageUrl')(request, response, async err => {
+      if (err) return reject(err);
+
+      const { productName, category, price, description, partNumber } = request.body;
+
+      const updateData: Partial<Product> = {
+        productName,
+        category,
+        price,
+        description,
+        partNumber,
+      };
+
+      // Add image path only if a file was uploaded
+      if (request.file?.path) {
+        updateData.imageUrl = request.file.path;
+      }
+
+      try {
+        await this.productRepository.updateById(id, updateData);
+        resolve();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+}
 
   @put('/products/{id}')
   @response(204, {
