@@ -175,6 +175,7 @@ async updateById(
       if (err) return reject(err);
 
       const { productName, category, price, description, partNumber } = request.body;
+
       const updateData: Partial<Product> = {
         productName,
         category,
