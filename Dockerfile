@@ -5,8 +5,6 @@ RUN mkdir -p /home/node/app
 WORKDIR /home/node/app
 
 # Update npm first
-RUN npm install -g npm@11.4.2
-
 COPY --chown=node package*.json ./
 
 # Use legacy peer deps to force installation
