@@ -77,6 +77,8 @@ export class ProductController {
 
            const imagePath = request.file?.path ?? '';
 
+           console.log('Image Path',imagePath);
+           
            const productData = {
              productName,
              category,
