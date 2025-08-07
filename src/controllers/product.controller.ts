@@ -38,25 +38,21 @@ const storage = multer.diskStorage({
 
 export const upload = multer({
   storage,
-  limits: {fileSize: 5 * 1024 * 1024}, // 5MB limit
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(
-      path.extname(file.originalname).toLowerCase(),
-    );
+    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = filetypes.test(file.mimetype);
-
-    if (mimetype && extname) {
-      return cb(null, true);
-    }
+    if (mimetype && extname) return cb(null, true);
     cb(new Error('Only image files are allowed!'));
   },
 });
 
+
 export class ProductController {
   constructor(
     @repository(ProductRepository)
-    public productRepository : ProductRepository,
+    public productRepository: ProductRepository,
   ) {}
 
   @post('/products')
@@ -67,35 +63,36 @@ export class ProductController {
   async create(
     @requestBody.file()
     request: Request,
-    @inject(RestBindings.Http.RESPONSE) response:Response
+    @inject(RestBindings.Http.RESPONSE) response: Response,
   ): Promise<Product> {
-   return new Promise((resolve, reject) => {
-         upload.single('imageUrl')(request, response, async err => {
-           if (err) return reject(err);
+    return new Promise((resolve, reject) => {
+      upload.single('imageUrl')(request, response, async err => {
+        if (err) return reject(err);
 
-           const {productName, category, price,description,partNumber} = request.body;
+        const {productName, category, price, description, partNumber} =
+          request.body;
 
-           const imagePath = request.file?.path ?? '';
+        const imagePath = request.file?.path.replace(/\\/g, '/') ?? '';
 
-           console.log('Image Path',imagePath);
-           
-           const productData = {
-             productName,
-             category,
-             price,
-             imageUrl: imagePath,
-             description,
-             partNumber
-           };
+        console.log('Image Path', imagePath);
 
-           try {
-             const newUser = await this.productRepository.create(productData);
-             resolve(newUser);
-           } catch (error) {
-             reject(error);
-           }
-         });
-       });
+        const productData = {
+          productName,
+          category,
+          price,
+          imageUrl: imagePath,
+          description,
+          partNumber,
+        };
+
+        try {
+          const newUser = await this.productRepository.create(productData);
+          resolve(newUser);
+        } catch (error) {
+          reject(error);
+        }
+      });
+    });
   }
 
   @get('/products/count')
@@ -103,9 +100,7 @@ export class ProductController {
     description: 'Product model count',
     content: {'application/json': {schema: CountSchema}},
   })
-  async count(
-    @param.where(Product) where?: Where<Product>,
-  ): Promise<Count> {
+  async count(@param.where(Product) where?: Where<Product>): Promise<Count> {
     return this.productRepository.count(where);
   }
 
@@ -157,49 +152,53 @@ export class ProductController {
   })
   async findById(
     @param.path.string('id') id: string,
-    @param.filter(Product, {exclude: 'where'}) filter?: FilterExcludingWhere<Product>
+    @param.filter(Product, {exclude: 'where'})
+    filter?: FilterExcludingWhere<Product>,
   ): Promise<Product> {
     return this.productRepository.findById(id, filter);
   }
 
   @patch('/products/{id}')
-@response(204, {
-  description: 'Product PATCH success',
-})
-async updateById(
-  @param.path.string('id') id: string,
-  @requestBody.file()
-  request: Request,
-  @inject(RestBindings.Http.RESPONSE) response: Response
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    upload.single('imageUrl')(request, response, async err => {
-      if (err) return reject(err);
+  @response(204, {
+    description: 'Product PATCH success',
+  })
+  async updateById(
+    @param.path.string('id') id: string,
+    @requestBody.file()
+    request: Request,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
+  ): Promise<void> {
+    return new Promise((resolve, reject) => {
+      upload.single('imageUrl')(request, response, async err => {
+        if (err) return reject(err);
 
-      const { productName, category, price, description, partNumber } = request.body;
+        const {productName, category, price, description, partNumber} =
+          request.body;
 
-      const updateData: Partial<Product> = {
-        productName,
-        category,
-        price,
-        description,
-        partNumber,
-      };
+        const updateData: Partial<Product> = {
+          productName,
+          category,
+          price,
+          description,
+          partNumber,
+        };
 
-      // Add image path only if a file was uploaded
-      if (request.file?.path) {
-        updateData.imageUrl = request.file.path;
-      }
+        console.log('File:', request.file);
 
-      try {
-        await this.productRepository.updateById(id, updateData);
-        resolve();
-      } catch (error) {
-        reject(error);
-      }
+        // Add image path only if a file was uploaded
+        if (request.file?.path) {
+          updateData.imageUrl = request.file?.path.replace(/\\/g, '/') ?? '';
+        }
+
+        try {
+          await this.productRepository.updateById(id, updateData);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      });
     });
-  });
-}
+  }
 
   @put('/products/{id}')
   @response(204, {
