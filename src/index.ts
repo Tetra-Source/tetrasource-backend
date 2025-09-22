@@ -5,6 +5,15 @@ export * from './application';
 export async function main(options: ApplicationConfig = {}) {
   const app = new TetraApplication(options);
   await app.boot();
+
+  app.bind('rest.cors').to({
+    origin: [
+      'http://localhost:4200',
+      'https://tetra-462403.web.app/'
+    ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   await app.start();
 
   const url = app.restServer.url;
