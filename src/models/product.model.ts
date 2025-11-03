@@ -22,10 +22,10 @@ export class Product extends Entity {
   category: string;
 
   @property({
-    type: 'number',
+    type: 'string',
     required: true,
   })
-  price: number;
+  manufacturer: string;
 
   @property({
     type: 'string',
@@ -34,16 +34,33 @@ export class Product extends Entity {
   imageUrl: string;
 
   @property({
-    type:'string',
-    required:true
+    type: 'string',
+    required: true,
   })
-  description: string
+  description: string;
 
   @property({
-    type:'string',
-    required:true
+    type: 'string',
+    required: true,
   })
-  partNumber: string
+  detailDescription: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  partNumber: string;
+  @property({
+    type: 'string',
+    required: true,
+  })
+  leedTime: string;
+
+  @property({
+    type: 'array',
+    itemType: 'object',
+  })
+  specification?: {specType: string; specDesc: string}[];
 
   @property({type: 'date', defaultFn: 'now'})
   createdAt?: Date;
@@ -51,7 +68,6 @@ export class Product extends Entity {
   updatedAt?: Date;
   @property({type: 'date'})
   deletedAt?: Date;
-
 
   constructor(data?: Partial<Product>) {
     super(data);

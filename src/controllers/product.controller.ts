@@ -38,16 +38,17 @@ const storage = multer.diskStorage({
 
 export const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: {fileSize: 5 * 1024 * 1024},
   fileFilter: (req, file, cb) => {
     const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const extname = filetypes.test(
+      path.extname(file.originalname).toLowerCase(),
+    );
     const mimetype = filetypes.test(file.mimetype);
     if (mimetype && extname) return cb(null, true);
     cb(new Error('Only image files are allowed!'));
   },
 });
-
 
 export class ProductController {
   constructor(
@@ -69,8 +70,16 @@ export class ProductController {
       upload.single('imageUrl')(request, response, async err => {
         if (err) return reject(err);
 
-        const {productName, category, price, description, partNumber} =
-          request.body;
+        const {
+          productName,
+          category,
+          manufacturer,
+          leedTime,
+          specification,
+          description,
+          partNumber,
+          detailDescription
+        } = request.body;
 
         const imagePath = request.file?.path.replace(/\\/g, '/') ?? '';
 
@@ -79,10 +88,13 @@ export class ProductController {
         const productData = {
           productName,
           category,
-          price,
+          manufacturer,
+          leedTime,
+          specification,
           imageUrl: imagePath,
           description,
           partNumber,
+          detailDescription
         };
 
         try {
@@ -172,15 +184,26 @@ export class ProductController {
       upload.single('imageUrl')(request, response, async err => {
         if (err) return reject(err);
 
-        const {productName, category, price, description, partNumber} =
-          request.body;
+        const {
+          productName,
+          category,
+          manufacturer,
+          leedTime,
+          specification,
+          description,
+          partNumber,
+          detailDescription
+        } = request.body;
 
         const updateData: Partial<Product> = {
           productName,
           category,
-          price,
+          manufacturer,
+          leedTime,
+          specification,
           description,
           partNumber,
+          detailDescription
         };
 
         console.log('File:', request.file);
