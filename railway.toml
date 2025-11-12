@@ -2,13 +2,10 @@
 builder = "nixpacks"
 
 [deploy]
-healthcheckPath = "/health"
-healthcheckTimeout = 300  # Increased timeout
-healthcheckInterval = 60
-healthcheckRetries = 5
+healthcheckPath = "/ping"
+healthcheckTimeout = 120
 
 [[services]]
 name = "web"
 [[services.ports]]
 port = 3000
-httpGetHealthcheck = true
