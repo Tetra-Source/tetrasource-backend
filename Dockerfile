@@ -2,8 +2,8 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY package.json ./
-COPY .npmrc ./
+# Copy package files (ONLY copy what exists)
+COPY package*.json ./
 
 # Install ALL dependencies (including dev dependencies for build)
 RUN npm install
@@ -17,9 +17,9 @@ RUN npm run build
 # Expose port
 EXPOSE 3000
 
-# Health check
+# Health check (optional)
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3000/health', (res) => process.exit(res.statusCode === 200 ? 0 : 1))"
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/health || exit 1
 
 # Start the application
 CMD ["npm", "start"]
