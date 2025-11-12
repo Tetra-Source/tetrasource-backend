@@ -2,8 +2,7 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+COPY package.json ./
 COPY .npmrc ./
 
 # Install ALL dependencies (including dev dependencies for build)
