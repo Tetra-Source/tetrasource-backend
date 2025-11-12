@@ -1,14 +1,17 @@
 [build]
 builder = "nixpacks"
-buildCommand = "npm run build"
-startCommand = "npm run start"
+
+[build.args]
+NIXPACKS_BUILD_CMD = "npm run build"
+NIXPACKS_START_CMD = "npm start"
+NIXPACKS_INSTALL_CMD = "npm install"
 
 [deploy]
 healthcheckPath = "/health"
 healthcheckTimeout = 120
-restartPolicyType = "ON_FAILURE"
 
 [[services]]
 name = "web"
 [[services.ports]]
 port = 3000
+httpGetHealthcheck = true

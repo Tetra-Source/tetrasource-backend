@@ -35,8 +35,8 @@
     "start": "node -r source-map-support/register .",
     "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
     "rebuild": "npm run clean && npm run build",
-    "railway:build": "npm run build || echo 'Build may have warnings but continuing...'",
-    "railway:start": "node -r source-map-support/register ."
+    "railway:build": "npm run build",
+    "railway:start": "npm start"
   },
   "resolutions": {
     "@loopback/core": "^6.1.11",
