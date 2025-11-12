@@ -5,5 +5,9 @@ build = "npm run build"
 [start]
 cmd = "npm run start"
 
+[[start.env]]
+name = "NODE_ENV"
+value = "production"
+
 [providers]
 node = "18"

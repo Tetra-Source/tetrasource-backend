@@ -5,7 +5,8 @@ startCommand = "npm run start"
 
 [deploy]
 healthcheckPath = "/health"
-healthcheckTimeout = 300
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
 
 [[services]]
 name = "web"
