@@ -1,0 +1,9 @@
+[phases]
+setup = "npm install"
+build = "npm run build"
+
+[start]
+cmd = "npm run start"
+
+[providers]
+node = "18"

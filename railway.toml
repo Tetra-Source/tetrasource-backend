@@ -1,0 +1,13 @@
+[build]
+builder = "nixpacks"
+buildCommand = "npm run build"
+startCommand = "npm run start"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+
+[[services]]
+name = "web"
+[[services.ports]]
+port = 3000
