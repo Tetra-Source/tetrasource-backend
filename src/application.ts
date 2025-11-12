@@ -35,8 +35,8 @@ export class TetraApplication extends BootMixin(
     const config = {
       ...options,
       rest: {
-        port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
-        host: process.env.HOST || '0.0.0.0',
+        port:  3000,
+        host: '0.0.0.0',
         // Add any other rest configuration you need
         ...options.rest,
       },
