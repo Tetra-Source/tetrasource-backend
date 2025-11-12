@@ -14,6 +14,7 @@
   "scripts": {
     "build": "lb-tsc",
     "build:watch": "lb-tsc --watch",
+    "dev": "node -r source-map-support/register .",
     "lint": "npm run eslint && npm run prettier:check",
     "lint:fix": "npm run eslint:fix && npm run prettier:fix",
     "prettier:cli": "lb-prettier \"**/*.ts\" \"**/*.js\"",
@@ -32,7 +33,7 @@
     "preopenapi-spec": "npm run build",
     "openapi-spec": "node ./dist/openapi-spec",
     "prestart": "npm run rebuild",
-    "start": "node -r source-map-support/register .",
+    "start": "node railway-start.js",
     "clean": "lb-clean dist *.tsbuildinfo .eslintcache",
     "rebuild": "npm run clean && npm run build",
     "railway:build": "npm run build",
