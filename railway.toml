@@ -9,4 +9,3 @@ healthcheckTimeout = 120
 name = "web"
 [[services.ports]]
 port = 3000
-httpGetHealthcheck = true
