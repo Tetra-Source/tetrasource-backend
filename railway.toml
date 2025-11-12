@@ -1,11 +1,14 @@
 [build]
-builder = "DOCKERFILE"
+builder = "nixpacks"
 
 [deploy]
 healthcheckPath = "/health"
-healthcheckTimeout = 120
+healthcheckTimeout = 300  # Increased timeout
+healthcheckInterval = 60
+healthcheckRetries = 5
 
 [[services]]
 name = "web"
 [[services.ports]]
 port = 3000
+httpGetHealthcheck = true

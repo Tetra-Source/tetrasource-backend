@@ -40,6 +40,33 @@ const PING_RESPONSE: ResponseObject = {
 export class PingController {
   constructor(@inject(RestBindings.Http.REQUEST) private req: Request) {}
 
+  // src/controllers/ping.controller.ts
+
+  @get('/health', {
+    responses: {
+      '200': {
+        description: 'Health Check',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'object',
+              properties: {
+                status: {type: 'string'},
+                timestamp: {type: 'string'},
+              },
+            },
+          },
+        },
+      },
+    },
+  })
+  healthCheck(): object {
+    return {
+      status: 'OK',
+      timestamp: new Date().toISOString(),
+    };
+  }
+
   // Map to `GET /ping`
   @get('/ping')
   @response(200, PING_RESPONSE)

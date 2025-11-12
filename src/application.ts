@@ -23,6 +23,7 @@ import {JWTService} from './services/jwt.service';
 import {TokenServiceBindings} from './services/key';
 import {BasicAuthorizationProvider} from './services/basic.authorizor';
 import {EmailService} from './services';
+import {PingController} from './controllers';
 
 
 export {ApplicationConfig};
@@ -32,6 +33,7 @@ export class TetraApplication extends BootMixin(
 ) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
+    this.controller(PingController);
     this.dataSource(UserDataSource);
     this.setUpBindings();
     this.component(AuthenticationComponent);
