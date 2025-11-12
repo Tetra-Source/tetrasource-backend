@@ -25,14 +25,30 @@ import {BasicAuthorizationProvider} from './services/basic.authorizor';
 import {EmailService} from './services';
 import {PingController} from './controllers';
 
-
 export {ApplicationConfig};
 
 export class TetraApplication extends BootMixin(
   ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
   constructor(options: ApplicationConfig = {}) {
-    super(options);
+    // ✅ CRITICAL FIX: Add port configuration for Railway
+    const config = {
+      ...options,
+      rest: {
+        port: process.env.PORT ? parseInt(process.env.PORT) : 3000,
+        host: process.env.HOST || '0.0.0.0',
+        // Add any other rest configuration you need
+        ...options.rest,
+      },
+    };
+
+    super(config);
+
+    // Add logging to see which port is being used
+    console.log('🚀 Server configured to run on port:', config.rest.port);
+    console.log('🌐 Host:', config.rest.host);
+
+    // Your existing code continues...
     this.controller(PingController);
     this.dataSource(UserDataSource);
     this.setUpBindings();
@@ -41,8 +57,7 @@ export class TetraApplication extends BootMixin(
     this.component(AuthorizationComponent);
     registerAuthenticationStrategy(this, JWTStrategy);
     this.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JWTService);
-    this.bind(TokenServiceBindings.TOKEN_SECRET).to('your-secret-key'); // Replace with your secret key
-    // Set up the custom sequence
+    this.bind(TokenServiceBindings.TOKEN_SECRET).to('your-secret-key');
     this.bind('authorizationProviders.basic-authorizer').toProvider(
       BasicAuthorizationProvider,
     );
@@ -60,17 +75,16 @@ export class TetraApplication extends BootMixin(
     this.component(RestExplorerComponent);
 
     this.projectRoot = __dirname;
-    // Customize @loopback/boot Booter Conventions here
     this.bootOptions = {
       controllers: {
-        // Customize ControllerBooter Conventions here
         dirs: ['controllers'],
         extensions: ['.controller.js'],
         nested: true,
       },
     };
   }
-  setUpBindings():void{
+
+  setUpBindings(): void {
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
   }
