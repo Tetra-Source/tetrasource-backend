@@ -2,11 +2,10 @@
 builder = "nixpacks"
 
 [deploy]
-healthcheckPath = "/ping"
+healthcheckPath = "/health"
 healthcheckTimeout = 60
 
 [[services]]
 name = "web"
 [[services.ports]]
 port = 3000
-httpGetHealthcheck = true
