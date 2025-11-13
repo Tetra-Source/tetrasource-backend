@@ -4,7 +4,7 @@ builder = "nixpacks"
 [deploy]
 healthcheckPath = "/health"
 healthcheckTimeout = 30
-healthcheckInterval = 15
+healthcheckInterval = 10
 
 [[services]]
 name = "web"
